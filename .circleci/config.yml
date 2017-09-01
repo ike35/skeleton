@@ -1,4 +1,4 @@
-va Gradle CircleCI 2.0 configuration file
+# Java Gradle CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
@@ -40,7 +40,3 @@ jobs:
         
       # run tests!
       - run: gradle test
-
-
-
-

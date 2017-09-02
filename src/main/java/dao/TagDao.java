@@ -23,6 +23,12 @@ public class TagDao {
     }
 
     public void insert(int receipt_id, String tag_name) {
+        // Untag check
+        if (dsl.selectFrom(TAGS).where(TAGS.RECEIPT_ID.eq(receipt_id)).and(TAGS.TAG_NAME.eq(tag_name)).fetchOne() != null) {
+            dsl.delete(TAGS).where(TAGS.RECEIPT_ID.eq(receipt_id)).and(TAGS.TAG_NAME.eq(tag_name)).execute();
+//            System.out.println("=========Untag:" + dsl.selectFrom(TAGS).where(TAGS.RECEIPT_ID.in(receipt_id)).fetch());
+            return;
+        }
         TagsRecord tagsRecord = dsl
                 .insertInto(TAGS, TAGS.RECEIPT_ID, TAGS.TAG_NAME)
                 .values(receipt_id, tag_name)
@@ -38,17 +44,13 @@ public class TagDao {
 
     public List<ReceiptsRecord> getReceiptsFromTag(String tag_name) {
         List<TagsRecord> List_tagName = dsl.selectFrom(TAGS).where(TAGS.TAG_NAME.eq(tag_name)).fetch();
-//        System.out.println("=======================here:  " + List_tagName.stream().map(x->x.getReceiptId()).collect(Collectors.toList()));
-//        System.out.println("=======================here:  " + List_tagName.get(0).get("receipt_id").hashCode());
         Integer[] receiptsIDList = new Integer[List_tagName.size()];
 
         for (int i = 0 ; i < List_tagName.size() ; i ++) {
             receiptsIDList[i] = Integer.parseInt(List_tagName.get(i).get("receipt_id").toString());
-//            System.out.println(receiptsIDList[i]);
         }
-//        System.out.println("=======================here:  " + receiptsIDList);
-        System.out.println(List_tagName + "\n\n");
-        System.out.println(dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.in(receiptsIDList)).fetch());
+//        System.out.println(List_tagName + "\n\n");
+//        System.out.println(dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.in(receiptsIDList)).fetch());
         return dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.in(receiptsIDList)).fetch();
     }
 }

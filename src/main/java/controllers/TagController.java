@@ -17,34 +17,33 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@Path("/tags")
+@Path("")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TagController {
     final TagDao tags;
-//    final ReceiptDao receipts;
 
     public TagController(TagDao tags) {
         this.tags = tags;
     }
 
     @PUT
-    @Path("/{tag}")
-    public void toggleTag(CreateTagRequest tag, @PathParam("tag") String tagName) {
-        // <your code here
-//        List<TagsRecord> tagsRecords = tags.getAllTags();
-        System.out.println("val = " + tagName);
-//        return Integer.toString(tag.receipt_id);
-//        return tagName;
-        tags.insert(tag.receipt_id, tagName);
-//        return tag.receipt_id;
+    @Path("/tags/{tag}")
+    public void toggleTag(Integer rID, @PathParam("tag") String tagName) {
+        tags.insert(rID, tagName);
     }
 
     @GET
-    @Path("/{tag}")
+    @Path("/tags/{tag}")
     public List<ReceiptResponse> getReceiptsFromTag (@PathParam("tag") String tagName) {
         List<ReceiptsRecord> receiptRecords = tags.getReceiptsFromTag(tagName);
         return receiptRecords.stream().map(ReceiptResponse::new).collect(toList());
-//        return tags.getReceiptsFromTag(tagName);
+    }
+
+    @GET
+    @Path("/netid")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String returnNetID () {
+        return "pt379";
     }
 }

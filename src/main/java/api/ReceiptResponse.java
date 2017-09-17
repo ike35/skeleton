@@ -20,7 +20,7 @@ public class ReceiptResponse {
     Integer id;
 
     @JsonProperty
-    String merchant;
+    String merchantName;
 
     @JsonProperty
     BigDecimal amount;
@@ -29,7 +29,7 @@ public class ReceiptResponse {
 //    Time created;
 
     public ReceiptResponse(ReceiptsRecord dbRecord) {
-        this.merchant = dbRecord.getMerchant();
+        this.merchantName = dbRecord.getMerchant();
         this.amount = dbRecord.getAmount();
 //        this.created = dbRecord.getUploaded();
         this.id = dbRecord.getId();

@@ -46,8 +46,10 @@
             var mAmount = 12;
             now_id = 0;
             
-            $(".button").click(function() {
+            $("#add-receipt").click(function() {
                 $("#inputbox").toggle();
+                $("#merchant").val("");
+                $("#amount").val("");
             });
 
             $("#cancel-receipt").click(function() {
@@ -68,8 +70,6 @@
             });
 
             function addClickEvent() {
-                
-
                 $(".add-tag").click(function() {
                     $(".tag_input").val("");
                     $(".tagbox").toggle();
@@ -85,12 +85,22 @@
                     // console.log(now_id);
                 });
 
-                $(".RTags").click(function() {
+                $(".tagValue").click(function() {
                     console.log(this.name);
                     var s = this.name.split(",")
                     addTag(parseInt(s[0]),s[1]);
                     $("#receiptList").empty();
                     getAllReceipts();
+                });
+
+                $(document).keypress(function(e) {
+                    if (e.keyCode == '13') {
+                        $(".tagbox").toggle();
+                        addTag(now_id,$(".tag_input").val());
+                        $("#receiptList").empty();
+                        getAllReceipts();
+                        now_id = 0;
+                    }
                 });
             }
             
@@ -126,17 +136,26 @@
                                 }
                             }
 
-                            $(`<div class="receipt"><div>
+                            var tempID = i + receipt.merchantName;
+                            $(`<div class="receipt" id="${tempID}">
                                 <div class="time"> - Time: ${receipt.created}</div>
-                                <div class="merchant"> - MerchantName: ${receipt.merchantName}</div>
-                                <div class="amount"> - MerchantAmount: ${receipt.amount}</div>
-                                <div class="tags"> - Tags: `)
+                                <div class="merchant">${receipt.merchantName}</div>
+                                <div class="amount">${receipt.amount}</div>
+                                <div class="tags"></div></div>`)
                                 .appendTo($("#receiptList"));
+
+
+                            // $("#receiptList").append('<div class="receipt"><div><div class="time"> - Time: ' +receipt.created+'</div><div class="merchant">'+receipt.merchantName+'</div><div class="amount">'+receipt.amount+'</div><div class="tags"> - Tags: ');
+
                             for (var j = 0 ; j < tag.length ; j++) {
-                                $("#receiptList").append("<a href='#' class='RTags' name='"+receipt.id+","+tag[j]+"'>"+tag[j]+" x</a> ");
+                                $("#"+tempID).append("<a href='#' class='tagValue' name='"+receipt.id+","+tag[j]+"'>"+tag[j]+"</a> ");
                             }
-                            $("#receiptList").append("<a class='add-tag' href='#' name='"+receipt.id+"'>Add +</a></div></div></div><hr>");
+                            $("#"+tempID).append("<input type='button' class='add-tag' name='"+receipt.id+"' value='Add +'>");
+                            $("#"+tempID).append("<hr>");
                         }
+                    },
+                    error: function(err) {
+                        console.log(err);
                     }
                 });
                 $(".tagbox").hide();
@@ -191,7 +210,7 @@
             <input type="submit" value="Tag It!" id="submit-tag">
         </div>
         
-    <div class="button">+</div>
+    <div class="button" id="add-receipt">+</div>
     <div id="receiptList">
     </div>
 </DIV>

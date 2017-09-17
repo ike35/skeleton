@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <script data-require="jquery@*" data-semver="3.1.1" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <style>
         #container {border: 1px solid brown;}
@@ -35,7 +35,8 @@
         $(function(){
             $("#inputbox").toggle();
             
-            const api = "http://localhost:8080"; // <- do not need a root api URL if this page is served directly by the API
+            const api = "http://52.14.132.80:8080";
+            // const api = "http://localhost:8080"; // <- do not need a root api URL if this page is served directly by the API
             
             all_tags = {};
             all_receipts = {};
@@ -108,7 +109,8 @@
             // get all receipts and show on the window
             function getAllReceipts() {
                 $.ajax({
-                    url: "http://localhost:8080/receipts",
+                    url: "http://52.14.132.80:8080/receipts",
+                    // url: "http://localhost:8080/receipts",
                     dataType: 'json',
                     async: false,
                     success: function(receipts) {
@@ -116,7 +118,8 @@
                         all_receipts = receipts;
                         
                         $.ajax({
-                            url: "http://localhost:8080/tags",
+                            url: "http://52.14.132.80:8080/tags",
+                            // url: "http://localhost:8080/tags",
                             dataType: 'json',
                             async: false,
                             success: function(tags) {
@@ -171,7 +174,8 @@
                 console.log(JSON.stringify(sendReceipt));
                 $.ajax({
                     method: "POST",
-                    url: "http://localhost:8080/receipts",
+                    url: "http://52.14.132.80:8080/receipts",
+                    // url: "http://localhost:8080/receipts",
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     data: JSON.stringify(sendReceipt),
@@ -181,7 +185,8 @@
 
             // add tag
             function addTag(itemID, tagName) {
-                var URL = "http://localhost:8080/tags/"+tagName;
+                var URL = "http://52.14.132.80:8080/tags/"+tagName;
+                // var URL = "http://localhost:8080/tags/"+tagName;
                 console.log(URL);
                 $.ajax({
                     method: "PUT",

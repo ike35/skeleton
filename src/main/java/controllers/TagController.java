@@ -40,6 +40,14 @@ public class TagController {
         return receiptRecords.stream().map(ReceiptResponse::new).collect(toList());
     }
 
+    // fetch all tags
+    @GET
+    @Path("/tags")
+    public List<TagResponse> getAllTags () {
+        List<TagsRecord> tagRecords = tags.getAllTags();
+        return tagRecords.stream().map(TagResponse::new).collect(toList());
+    }
+
     @GET
     @Path("/netid")
     @Produces(MediaType.TEXT_PLAIN)

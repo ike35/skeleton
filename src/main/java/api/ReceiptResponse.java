@@ -25,13 +25,16 @@ public class ReceiptResponse {
     @JsonProperty
     BigDecimal amount;
 
-//    @JsonProperty
-//    Time created;
+    @JsonProperty
+    BigDecimal tags;
+
+    @JsonProperty
+    Time created;
 
     public ReceiptResponse(ReceiptsRecord dbRecord) {
         this.merchantName = dbRecord.getMerchant();
         this.amount = dbRecord.getAmount();
-//        this.created = dbRecord.getUploaded();
+        this.created = dbRecord.getUploaded();
         this.id = dbRecord.getId();
     }
 }

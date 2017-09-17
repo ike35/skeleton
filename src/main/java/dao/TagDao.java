@@ -53,4 +53,8 @@ public class TagDao {
 //        System.out.println(dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.in(receiptsIDList)).fetch());
         return dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.in(receiptsIDList)).fetch();
     }
+
+    public List<TagsRecord> getAllTags() {
+        return dsl.selectFrom(TAGS).fetch();
+    }
 }

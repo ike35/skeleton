@@ -34,15 +34,77 @@
         // execute until the page has loaded
         $(function(){
             const api = "http://localhost:8080"; // <- do not need a root api URL if this page is served directly by the API
+            
+            all_tags = {};
+            all_receipts = {};
+            getAllReceipts();
+            // console.log(all_tags);
 
-            $.getJSON(api+"/receipts", function(receipts){
-                for(var i=0; i < receipts.length; i++) {
-                    var receipt = receipts[i];
-                    $(`<div class="receipt">${receipt.merchantName}<div><span class="receiptTag">t1</span></div></div>`)
-                        .appendTo($("#receiptList"));
-                }
+            var mName = "hi";
+            var mAmount = 12;
+            // postReceipt(mName, mAmount);
+            $(".button").click(function() {
+                console.log("hihihi");
+            });
 
-            })
+            // get all receipts and show on the window
+            function getAllReceipts() {
+                $.ajax({
+                    url: "http://localhost:8080/receipts",
+                    dataType: 'json',
+                    async: false,
+                    success: function(receipts) {
+                        // console.log(receipts);
+                        all_receipts = receipts;
+                        
+                        $.ajax({
+                            url: "http://localhost:8080/tags",
+                            dataType: 'json',
+                            async: false,
+                            success: function(tags) {
+                            // console.log(tags);
+                                all_tags = tags;
+                            }
+                        });
+
+                        for(var i = all_receipts.length-1 ; i >= 0 ; i--) {
+                            // console.log(receipts);
+                            var receipt = all_receipts[i];
+                            var receipt_id = receipt.id;
+                            var tag = [];
+                            for(var j = 0 ; j < all_tags.length ; j++) {
+                                if (all_tags[j].receipt_id === receipt.id) {
+                                    tag.push(all_tags[j].tag_name);
+                                }
+                            }
+
+                            $(`<div class="receipt"><div>
+                                <div class="time">${receipt.created}</div>
+                                <div class="merchant">${receipt.merchantName}</div>
+                                <div class="amount">${receipt.amount}</div>
+                                <div class="tags">${tag}</div></div></div>`)
+                                .appendTo($("#receiptList"));
+                        }
+                  }
+                });
+                
+            }
+
+            // post a receipt
+            function postReceipt(merchantName, merchantAmount) {
+                var sendReceipt = {
+                   merchant: merchantName,
+                   amount: merchantAmount
+                };
+                console.log(JSON.stringify(sendReceipt));
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:8080/receipts",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(sendReceipt)
+                });
+            }
         })
     </script>
 </head>

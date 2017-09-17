@@ -46,26 +46,29 @@
             var mAmount = 12;
             now_id = 0;
             
+            $(".button").click(function() {
+                $("#inputbox").toggle();
+            });
+
+            $("#cancel-receipt").click(function() {
+                $("#inputbox").toggle();
+                $("#merchant").val("");
+                $("#amount").val("");
+            });
+
+            $("#save-receipt").click(function() {
+                // TODO: check if NULL
+                var mName = $("#merchant").val();
+                var mAmount = $("#amount").val();
+                // console.log(mName+mAmount);
+                postReceipt(mName, parseInt(mAmount));
+                $("#receiptList").empty();
+                getAllReceipts();
+                $("#inputbox").toggle();
+            });
+
             function addClickEvent() {
-                $(".button").click(function() {
-                    $("#inputbox").toggle();
-                });
-
-                $("#cancel-receipt").click(function() {
-                    $("#inputbox").toggle();
-                    $("#merchant").val("");
-                    $("#amount").val("");
-                });
-
-                $("#save-receipt").click(function() {
-                    // TODO: check if NULL
-                    var mName = $("#merchant").val();
-                    var mAmount = $("#amount").val();
-                    // console.log(mName+mAmount);
-                    postReceipt(mName, parseInt(mAmount));
-                    $("#receiptList").empty();
-                    getAllReceipts();
-                });
+                
 
                 $(".add-tag").click(function() {
                     $(".tag_input").val("");

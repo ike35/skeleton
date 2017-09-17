@@ -44,54 +44,53 @@
 
             var mName = "hi";
             var mAmount = 12;
-            now_id = 0
+            now_id = 0;
+            
+            function addClickEvent() {
+                $(".button").click(function() {
+                    $("#inputbox").toggle();
+                });
 
-            // postReceipt(mName, mAmount);
-            $(".button").click(function() {
-                $("#inputbox").toggle();
-            });
+                $("#cancel-receipt").click(function() {
+                    $("#inputbox").toggle();
+                    $("#merchant").val("");
+                    $("#amount").val("");
+                });
 
-            $("#cancel-receipt").click(function() {
-                $("#inputbox").toggle();
-                $("#merchant").val("");
-                $("#amount").val("");
-            });
+                $("#save-receipt").click(function() {
+                    // TODO: check if NULL
+                    var mName = $("#merchant").val();
+                    var mAmount = $("#amount").val();
+                    // console.log(mName+mAmount);
+                    postReceipt(mName, parseInt(mAmount));
+                    $("#receiptList").empty();
+                    getAllReceipts();
+                });
 
-            $("#save-receipt").click(function() {
-                // TODO: check if NULL
-                var mName = $("#merchant").val();
-                var mAmount = $("#amount").val();
-                // console.log(mName+mAmount);
-                postReceipt(mName, parseInt(mAmount));
-                $("#receiptList").empty();
-                getAllReceipts();
-            });
+                $(".add-tag").click(function() {
+                    $(".tag_input").val("");
+                    $(".tagbox").toggle();
+                    now_id = parseInt(this.name);
+                });
 
-            $(".add-tag").click(function() {
-                $(".tag_input").val("");
-                $(".tagbox").toggle();
-                // console.log($(this).parent().hasClass('tag_input'));
-                // console.log(this.name);
-                now_id = parseInt(this.name);
-            });
+                $("#submit-tag").click(function(event) {
+                    $(".tagbox").toggle();
+                    addTag(now_id,$(".tag_input").val());
+                    $("#receiptList").empty();
+                    getAllReceipts();
+                    now_id = 0;
+                    // console.log(now_id);
+                });
 
-            $("#submit-tag").click(function() {
-                $(".tagbox").toggle();
-                addTag(now_id,$(".tag_input").val());
-                $("#receiptList").empty();
-                getAllReceipts();
-                // $(".tagbox").toggle();
-                now_id = 0;
-                // console.log(now_id);
-            });
-
-            $(".RTags").click(function() {
-                console.log(this.name);
-                var s = this.name.split(",")
-                addTag(parseInt(s[0]),s[1]);
-                $("#receiptList").empty();
-                getAllReceipts();
-            });
+                $(".RTags").click(function() {
+                    console.log(this.name);
+                    var s = this.name.split(",")
+                    addTag(parseInt(s[0]),s[1]);
+                    $("#receiptList").empty();
+                    getAllReceipts();
+                });
+            }
+            
 
             // get all receipts and show on the window
             function getAllReceipts() {
@@ -134,15 +133,11 @@
                                 $("#receiptList").append("<a href='#' class='RTags' name='"+receipt.id+","+tag[j]+"'>"+tag[j]+" x</a> ");
                             }
                             $("#receiptList").append("<a class='add-tag' href='#' name='"+receipt.id+"'>Add +</a></div></div></div><hr>");
-
-                            // $(`<a class="add-tag" href="#">Add +</a></div></div></div>
-                                
-                            //     <hr>`)
-                            //     .appendTo($("#receiptList"));
                         }
                     }
                 });
-                $(".tagbox").toggle();
+                $(".tagbox").hide();
+                addClickEvent();
             }
 
             // post a receipt
@@ -172,8 +167,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     data: JSON.stringify(itemID),
-                    async: false,
-                    success: function(receipts) {}
+                    async: false
                 });
             }
         })
